@@ -11,6 +11,7 @@ func Router() *mux.Router {
 
 	router := mux.NewRouter()
 
+	router.HandleFunc("/api/shutdown", middleware.GracefulShutdown).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/task", middleware.GetAllTask).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/task", middleware.CreateTask).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/task/{id}", middleware.TaskComplete).Methods("PUT", "OPTIONS")

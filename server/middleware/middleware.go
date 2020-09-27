@@ -6,6 +6,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"server/models"
 
@@ -17,11 +21,12 @@ import (
 )
 
 // DB connection string
-// const connectionString = "mongodb://localhost:27017"
-const connectionString = "Connection String"
+const connectionString = "mongodb+srv://gotodoUser:gotodoUser@cluster0.ldwse.mongodb.net/gotodo?authSource=admin&replicaSet=atlas-t2vva2-shard-0&w=majority&readPreference=primary&retryWrites=true&ssl=true"
+
+//const connectionString = "Connection String"
 
 // Database Name
-const dbName = "test"
+const dbName = "gotodo"
 
 // Collection name
 const collName = "todolist"
@@ -35,8 +40,11 @@ func init() {
 	// Set client options
 	clientOptions := options.Client().ApplyURI(connectionString)
 
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
 	// connect to MongoDB
-	client, err := mongo.Connect(context.TODO(), clientOptions)
+	client, err := mongo.Connect(ctx, clientOptions)
 
 	if err != nil {
 		log.Fatal(err)
@@ -54,6 +62,27 @@ func init() {
 	collection = client.Database(dbName).Collection(collName)
 
 	fmt.Println("Collection instance created!")
+}
+
+// GracefulShutdown gracefully exits
+func GracefulShutdown(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	timer1 := time.NewTimer(time.Second)
+	start := time.Now()
+
+	go func(sinceStart time.Time) {
+		<-timer1.C
+		elapsed := time.Since(sinceStart)
+		fmt.Println("Exiting! Time: ", elapsed.String())
+		os.Exit(0)
+	}(start)
+
+	json.NewEncoder(w).Encode("Sutting down gracefully.")
+	elapsed := time.Since(start)
+	fmt.Println("Composed Shutdown Reply! Time: ", elapsed.String())
 }
 
 // GetAllTask get all the task route
@@ -124,6 +153,20 @@ func DeleteAllTask(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(count)
 	// json.NewEncoder(w).Encode("Task not found")
 
+}
+
+// handle shutdown
+func gracefulShutdown() <-chan struct{} {
+	end := make(chan struct{})
+	s := make(chan os.Signal, 1)
+	signal.Notify(s, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-s
+		fmt.Println("Sutting down gracefully.")
+		// clean up here
+		close(end)
+	}()
+	return end
 }
 
 // get all task from the DB and return it

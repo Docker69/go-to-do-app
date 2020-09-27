@@ -1,4 +1,4 @@
-FROM golang:alpine AS builder
+ FROM golang:alpine AS builder
 
 # Set necessary environmet variables needed for our image
 ENV GO111MODULE=on \
@@ -31,7 +31,8 @@ RUN cp /build/server .
 #CMD ["/dist/main"]
 
 # Build a small image
-FROM scratch
+#FROM scratch
+FROM golang:alpine
 
 COPY --from=builder /dist/server /
 
@@ -40,3 +41,4 @@ EXPOSE 8080
 
 # Command to run
 ENTRYPOINT ["/server"]
+#CMD ["while true; do echo hello world; sleep 1; done"]

@@ -21,9 +21,7 @@ import (
 )
 
 // DB connection string
-const connectionString = "mongodb+srv://gotodoUser:gotodoUser@cluster0.ldwse.mongodb.net/gotodo?authSource=admin&replicaSet=atlas-t2vva2-shard-0&w=majority&readPreference=primary&retryWrites=true&ssl=true"
-
-//const connectionString = "Connection String"
+const connectionString = "Connection String"
 
 // Database Name
 const dbName = "gotodo"

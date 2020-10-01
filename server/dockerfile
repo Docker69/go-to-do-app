@@ -34,6 +34,9 @@ RUN cp /build/server .
 #FROM scratch
 FROM golang:alpine
 
+# Move to / directory
+WORKDIR /
+
 COPY --from=builder /dist/server /
 
 # Export necessary port
@@ -41,4 +44,3 @@ EXPOSE 8080
 
 # Command to run
 ENTRYPOINT ["/server"]
-#CMD ["while true; do echo hello world; sleep 1; done"]

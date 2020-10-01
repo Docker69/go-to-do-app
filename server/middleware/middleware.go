@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"server/config"
 	"server/models"
 
 	"github.com/gorilla/mux"
@@ -19,9 +20,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-// DB connection string
-const connectionString = "Connection String"
 
 // Database Name
 const dbName = "gotodo"
@@ -35,8 +33,11 @@ var collection *mongo.Collection
 // create connection with mongo db
 func init() {
 
+	//get connection string
+	var connStr = config.ViperEnvVariable("MONGODB_CONN")
+
 	// Set client options
-	clientOptions := options.Client().ApplyURI(connectionString)
+	clientOptions := options.Client().ApplyURI(connStr)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

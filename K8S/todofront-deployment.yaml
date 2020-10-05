@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: D:\Work\go-to-do-app\kompose.exe convert
+    kompose.version: 1.21.0 (992df58d8)
+  #creationTimestamp: null
+  labels:
+    io.kompose.service: todofront
+  name: todofront
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: todofront
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: D:\Work\go-to-do-app\kompose.exe convert
+        kompose.version: 1.21.0 (992df58d8)
+      #creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.network/frontend: "true"
+        io.kompose.service: todofront
+    spec:
+      containers:
+      - image: gotodoappcli
+        imagePullPolicy: "Always"
+        name: todofront
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      #volumes: null
+status: {}

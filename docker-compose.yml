@@ -1,7 +1,7 @@
-version: '3.8'
+version: '3'
 
 services:
-  frontend:
+  todofront:
     image: gotodoappcli
     build: 
       context: ./client
@@ -11,14 +11,16 @@ services:
       - frontend
       - backend
     depends_on:
-      - backend
+      - todoback
   
-  backend:
+  todoback:
     image: gotodoapp
     build:
       context: ./server
     volumes:
       - ./server/configuration:/configuration
+    ports:
+      - "8080"
     networks: 
       - backend
 

@@ -17,8 +17,6 @@ services:
     image: gotodoapp
     build:
       context: ./server
-    volumes:
-      - ./server/configuration:/configuration
     ports:
       - "8080"
     networks: 

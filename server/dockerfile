@@ -34,6 +34,10 @@ RUN cp /build/server .
 #FROM scratch
 FROM golang:alpine
 
+# Move to configuration directory
+WORKDIR /configuration
+COPY ./configuration/.env .
+
 # Move to / directory
 WORKDIR /
 
@@ -43,4 +47,5 @@ COPY --from=builder /dist/server /
 EXPOSE 8080
 
 # Command to run
+#CMD ["sleep", "infinity"]
 ENTRYPOINT ["/server"]

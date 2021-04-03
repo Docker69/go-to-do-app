@@ -4,7 +4,7 @@ This is a to-do list application. The complete tutorial is published on [my blog
 
 **Server: Golang  
 Client: React, semantic-ui-react  
-Database: Local MongoDB** / MongoDB Atlas
+Database: Local MongoDB / MongoDB Atlas**
 
 ---
 

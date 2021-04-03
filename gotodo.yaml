@@ -50,7 +50,7 @@ items:
         io.kompose.service: todoback
       name: todoback
     spec:
-      replicas: 1
+      replicas: 2
       selector:
         matchLabels:
           io.kompose.service: todoback
@@ -66,7 +66,7 @@ items:
             io.kompose.service: todoback
         spec:
           containers:
-            - image: gotodoapp/debug:v0.28.03.2021
+            - image: docker69/gotodoapp:v0.28.03.2021
               name: todoback
               ports:
                 - containerPort: 8080
@@ -115,7 +115,7 @@ items:
             io.kompose.service: todofront
         spec:
           containers:
-            - image: gotodoappcli/debug:v0.28.03.2021
+            - image: docker69/gotodoappcli:v0.28.03.2021
               name: todofront
               ports:
                 - containerPort: 80
@@ -136,18 +136,7 @@ items:
       podSelector:
         matchLabels:
           io.kompose.network/frontend: "true"
-#  - apiVersion: networking.k8s.io/v1
-#    kind: Ingress
-#    metadata:
-#      name: gotodo-ingress
-#    spec:
-#      rules:
-#      - http:
-#          paths:
-#          - path: /
-#            backend:
-#              serviceName: todofront
-#              servicePort: 80
+
 kind: List
 metadata: {}
 

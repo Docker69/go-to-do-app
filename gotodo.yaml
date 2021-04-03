@@ -66,7 +66,7 @@ items:
             io.kompose.service: todoback
         spec:
           containers:
-            - image: docker69/gotodoapp:v0.28.03.2021
+            - image: docker69/gotodoapp:latest
               name: todoback
               ports:
                 - containerPort: 8080
@@ -115,7 +115,7 @@ items:
             io.kompose.service: todofront
         spec:
           containers:
-            - image: docker69/gotodoappcli:v0.28.03.2021
+            - image: docker69/gotodoappcli:latest
               name: todofront
               ports:
                 - containerPort: 80

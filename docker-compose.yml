@@ -2,7 +2,7 @@ version: '3'
 
 services:
   todofront:
-    image: gotodoappcli
+    image: docker69/gotodoappcli
     build: 
       context: ./client
     ports:
@@ -14,7 +14,7 @@ services:
       - todoback
   
   todoback:
-    image: gotodoapp
+    image: docker69/gotodoapp
     build:
       context: ./server
     ports:

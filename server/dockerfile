@@ -1,7 +1,7 @@
- FROM golang:alpine AS builder
+FROM golang:alpine AS builder
 
 # Set necessary environmet variables needed for our image
-ENV GO111MODULE=on \
+ENV GO111MODULE=auto \
     CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64
@@ -32,7 +32,7 @@ RUN cp /build/server .
 
 # Build a small image
 #FROM scratch
-FROM golang:alpine
+FROM alpine
 
 # Move to configuration directory
 WORKDIR /configuration

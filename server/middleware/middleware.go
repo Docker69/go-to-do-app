@@ -7,9 +7,9 @@ import (
 	"os"
 	"time"
 
-	"server/models"
-	"server/util/config"
-	"server/util/logger"
+	"go-to-do-app/server/models"
+	"go-to-do-app/util/config"
+	"go-to-do-app/util/logger"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"

@@ -9,7 +9,7 @@ import (
 
 	"github.com/rs/zerolog"
 
-	"server/util/logger"
+	"go-to-do-app/util/logger"
 )
 
 // setup would normally be an init() function, however, there seems

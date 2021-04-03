@@ -2,11 +2,11 @@ package logger
 
 import (
 	"context"
+	"go-to-do-app/util/config"
 	"io"
 	"os"
 	"strconv"
 	"sync"
-	"util/config"
 
 	"github.com/rs/zerolog"
 )

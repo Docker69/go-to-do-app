@@ -16,7 +16,8 @@ services:
   todoback:
     image: docker69/gotodoapp
     build:
-      context: ./server
+      context: .
+      dockerfile: ./server/dockerfile
     ports:
       - "8080"
     networks: 

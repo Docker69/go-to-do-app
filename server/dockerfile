@@ -8,21 +8,23 @@ ENV GO111MODULE=auto \
 
 # Move to working directory /build
 WORKDIR /build
-
 # Copy the code into the container
-COPY . .
+COPY go.mod go.sum ./
 
 # Copy and download dependency using go mod
 RUN go mod download
 
+COPY ./server ./server
+COPY ./util ./util
+
 # Build the application
-RUN go build -o server .
+RUN go build -ldflags '-w -s' -a -o ./serverBuild ./server
 
 # Move to /dist directory as the place for resulting binary folder
 WORKDIR /dist
 
 # Copy binary from build to main folder
-RUN cp /build/server .
+RUN cp /build/serverBuild ./server
 
 # Export necessary port
 #EXPOSE 8080
@@ -36,7 +38,7 @@ FROM alpine
 
 # Move to configuration directory
 WORKDIR /configuration
-COPY ./configuration/.env .
+COPY ./server/configuration/.env .
 
 # Move to / directory
 WORKDIR /

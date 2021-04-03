@@ -1,0 +1,11 @@
+.git
+.gitignore
+.vscode
+.github
+README.md
+LICENSE
+docker-compose.yml
+gotodo.yaml
+client
+images
+mongodb

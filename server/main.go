@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"server/router"
-	"server/util/logger"
+	"go-to-do-app/server/router"
+	"go-to-do-app/util/logger"
 )
 
 var log = logger.GetLogger()

@@ -4,13 +4,7 @@ This is a to-do list application. The complete tutorial is published on [my blog
 
 **Server: Golang  
 Client: React, semantic-ui-react  
-Database: Local MongoDB**
-
-The offline version of application `Get Shit Done` is hosted at  
-
-:link: https://schadokar.github.io/go-to-do-app/     
-
-:link: http://getshitdone.surge.sh
+Database: Local MongoDB / MongoDB Atlas**
 
 ---
 

@@ -4,9 +4,9 @@ import (
 	"context"
 	"io"
 	"os"
-	"server/util/config"
 	"strconv"
 	"sync"
+	"util/config"
 
 	"github.com/rs/zerolog"
 )

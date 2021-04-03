@@ -4,15 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
-	"server/config"
 	"server/models"
+	"server/util/config"
+	"server/util/logger"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
@@ -30,6 +28,8 @@ const collName = "todolist"
 // collection object/instance
 var collection *mongo.Collection
 
+var log = logger.GetLogger()
+
 // create connection with mongo db
 func init() {
 
@@ -46,21 +46,21 @@ func init() {
 	client, err := mongo.Connect(ctx, clientOptions)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
 	// Check the connection
 	err = client.Ping(context.TODO(), nil)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
-	fmt.Println("Connected to MongoDB!")
+	log.Info().Msg("Connected to MongoDB!")
 
 	collection = client.Database(dbName).Collection(collName)
 
-	fmt.Println("Collection instance created!")
+	log.Info().Msg("Collection instance created!")
 }
 
 // GracefulShutdown gracefully exits
@@ -75,13 +75,15 @@ func GracefulShutdown(w http.ResponseWriter, r *http.Request) {
 	go func(sinceStart time.Time) {
 		<-timer1.C
 		elapsed := time.Since(sinceStart)
-		fmt.Println("Exiting! Time: ", elapsed.String())
+		//log.Info().Dur("duration", elapsed).Msg("Exiting!")
+		log.Info().Msgf("Exiting!, Duration: %s", elapsed)
 		os.Exit(0)
 	}(start)
 
 	json.NewEncoder(w).Encode("Sutting down gracefully.")
 	elapsed := time.Since(start)
-	fmt.Println("Composed Shutdown Reply! Time: ", elapsed.String())
+	//log.Info().Dur("duration", elapsed).Msg("Composed Shutdown Reply!")
+	log.Info().Msgf("Composed Shutdown Reply!, Duration: %s", elapsed)
 }
 
 // GetAllTask get all the task route
@@ -155,7 +157,7 @@ func DeleteAllTask(w http.ResponseWriter, r *http.Request) {
 }
 
 // handle shutdown
-func gracefulShutdown() <-chan struct{} {
+/* func gracefulShutdown() <-chan struct{} {
 	end := make(chan struct{})
 	s := make(chan os.Signal, 1)
 	signal.Notify(s, syscall.SIGINT, syscall.SIGTERM)
@@ -167,12 +169,12 @@ func gracefulShutdown() <-chan struct{} {
 	}()
 	return end
 }
-
+*/
 // get all task from the DB and return it
 func getAllTask() []primitive.M {
 	cur, err := collection.Find(context.Background(), bson.D{{}})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
 	var results []primitive.M
@@ -180,7 +182,7 @@ func getAllTask() []primitive.M {
 		var result bson.M
 		e := cur.Decode(&result)
 		if e != nil {
-			log.Fatal(e)
+			log.Fatal().Err(e).Msg("")
 		}
 		// fmt.Println("cur..>", cur, "result", reflect.TypeOf(result), reflect.TypeOf(result["_id"]))
 		results = append(results, result)
@@ -188,7 +190,7 @@ func getAllTask() []primitive.M {
 	}
 
 	if err := cur.Err(); err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
 	cur.Close(context.Background())
@@ -200,7 +202,7 @@ func insertOneTask(task models.ToDoList) {
 	insertResult, err := collection.InsertOne(context.Background(), task)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
 	fmt.Println("Inserted a Single Record ", insertResult.InsertedID)
@@ -214,7 +216,7 @@ func taskComplete(task string) {
 	update := bson.M{"$set": bson.M{"status": true}}
 	result, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
 	fmt.Println("modified count: ", result.ModifiedCount)
@@ -228,7 +230,7 @@ func undoTask(task string) {
 	update := bson.M{"$set": bson.M{"status": false}}
 	result, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
 	fmt.Println("modified count: ", result.ModifiedCount)
@@ -241,7 +243,7 @@ func deleteOneTask(task string) {
 	filter := bson.M{"_id": id}
 	d, err := collection.DeleteOne(context.Background(), filter)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
 	fmt.Println("Deleted Document", d.DeletedCount)
@@ -251,7 +253,7 @@ func deleteOneTask(task string) {
 func deleteAllTask() int64 {
 	d, err := collection.DeleteMany(context.Background(), bson.D{{}}, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 
 	fmt.Println("Deleted Document", d.DeletedCount)

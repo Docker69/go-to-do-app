@@ -1,8 +1,7 @@
 package config
 
 import (
-	"log"
-
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
@@ -20,7 +19,7 @@ func ViperEnvVariable(key string) string {
 	err := viper.ReadInConfig()
 
 	if err != nil {
-		log.Fatalf("Error while reading config file %s", err)
+		log.Fatal().Err(err).Msg("Error while reading config file")
 	}
 
 	// viper.Get() returns an empty interface{}
@@ -32,7 +31,7 @@ func ViperEnvVariable(key string) string {
 	// If the type is a string then ok will be true
 	// ok will make sure the program not break
 	if !ok {
-		log.Fatalf("Invalid type assertion")
+		log.Fatal().Msg("Invalid type assertion")
 	}
 
 	return value

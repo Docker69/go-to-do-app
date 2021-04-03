@@ -1,18 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
 	"server/router"
+	"server/util/logger"
 )
 
-func main() {
-	r := router.Router()
-	// fs := http.FileServer(http.Dir("build"))
-	// http.Handle("/", fs)
-	fmt.Println("Starting server on the port 8080...")
+var log = logger.GetLogger()
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+func main() {
+
+	r := router.Router()
+	log.Info().Msg("Starting server on the port 8080...")
+
+	err := http.ListenAndServe(":8080", r)
+	log.Fatal().Err(err).Msg("")
 }
